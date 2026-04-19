@@ -17,7 +17,7 @@ INSTANCE_IDS=$(aws ec2 describe-instances \
 for INST in $INSTANCE_IDS; do
     echo "Terminating instance(s): $INST"
     aws ec2 terminate-instances --instance-ids "$INST" --region us-west-2 --profile lu
-    aws ec2 wait instance-terminated --instance-id "$INST" --region us-west-2 --profile lu
+    aws ec2 wait instance-terminated --instance-ids "$INST" --region us-west-2 --profile lu
 done
 
 
