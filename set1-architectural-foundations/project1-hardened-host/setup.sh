@@ -1,88 +1,131 @@
 #!/bin/bash
 
-set -e
+set -eo pipefail
 
-# Golden AMI ID: ami-084672faad54ae817
-# MANUAL CHECKLIST (console steps that cannot be scripted)
-# 1. Create IAM Role with AmazonSSMManagedInstanceCore
-# 2. Add inline CloudWatch policy to the role (see below)
-# 3. Launch t3.micro on Amazon Linux 2023
-#    - Tag: Project: Cloud-Security, Env: Dev
-#    - Attach IAM role as instance profile
-#    - Security group with zero inbound rules
-#    - IMDSv2 required, hop limit 1
-#    - No key pair
-# 4. Create CloudWatch log group /ssm/sessions (1 week retention)
-#    - Tag: Project: Cloud-Security
-# 5. Enable CloudWatch logging in Session Manager preferences
-#    - Point at /ssm/sessions
+# GOLDEN AMI: ami-09118f7090eec8c03
+
+# Manual Checklist (console steps that are not scripted)
+# 1. Create IAM role with AmazonSSMMangedInstanceCore
+#     - Tag: Project: Cloud-Security, Env: Dev
+# 2. Launch instance project1-instance
+#     - Tag: Project: Cloud-Security, Env: Dev
+#     - Amazon Linux 2023 AMI
+#     - t3.micro instance type
+#     - Proceed with no key pair
+#     - Create project1-security-group with zero inbound rules
+#     - Attach project1-role IAM role to instance
+#     - IMDSv2 only + Hop limit 1
+# 3. Create ssm/sessions/ log group in CloudWatch console
+#     - 7 day retention
+#     - Tag: Project: Cloud-Security, Env: Dev
+# 4. Enable CloudWatch logging in Session Manager preferences
+#    - Point at /ssm/sessions log group
 #    - Do not enforce encryption
+# 5. CloudWatch IAM inline policy
+#	 {
+#	 	 "Version": "2012-10-17",
+#		 "Statement": [
+#			 {
+#				 "Effect": "Allow",
+#				 "Action": "logs:DescribeLogGroups",
+#				 "Resource": "*"
+#			 },
+#			 {
+#				 "Effect": "Allow",
+#				 "Action": [
+#					 "logs:CreateLogStream",
+#					 "logs:PutLogEvents",
+#					 "logs:DescribeLogStreams"
+#				 ],
+#				 "Resource": "arn:aws:logs:*:*:log-group:/ssm/sessions:*"
+#			 }
+#		 ]
+#	 }
 
-# CLOUDWATCH IAM INLINE POLICY
-#
-# {
-#     "Version": "2012-10-17",
-#     "Statement": [
-#         {
-#             "Effect": "Allow",
-#             "Action": "logs:DescribeLogGroups",
-#             "Resource": "*"
-#         },
-#         {
-#             "Effect": "Allow",
-#             "Action": [
-#                 "logs:CreateLogStream",
-#                 "logs:PutLogEvents",
-#                 "logs:DescribeLogStreams"
-#             ],
-#             "Resource": "arn:aws:logs:*:*:log-group:/ssm/sessions:*"
-#         }
-#     ]
-# }
-
-
-# phase 3: nginx
-sudo dnf update -y && sudo dnf install -y nginx
+# nginx setup & self-healing
+sudo dnf update -y && sudo dnf install nginx -y
 sudo systemctl enable --now nginx
 sudo mkdir -p /etc/systemd/system/nginx.service.d
 sudo tee /etc/systemd/system/nginx.service.d/override.conf <<'EOF'
+[Unit]
+StartLimitBurst=3
+StartLimitIntervalSec=60
+
 [Service]
-Restart=always
+Restart=on-failure
 RestartSec=5s
 EOF
-sudo systemctl daemon-reload
 
-# phase 4: logrotate
+sudo tee /usr/local/bin/nginx-watchdog.sh <<'EOF'
+#!/bin/bash
+
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 http://127.0.0.1/)
+if [ "$HTTP_CODE" != "200" ]; then
+	logger -t nginx-watchdog "Health check failed (HTTP $HTTP_CODE). Restarting nginx."
+	systemctl restart nginx
+fi
+EOF
+sudo chmod +x /usr/local/bin/nginx-watchdog.sh
+
+sudo tee /etc/systemd/system/nginx-watchdog.service <<'EOF'
+[Unit]
+Description=Nginx health watchdog
+After=nginx.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/nginx-watchdog.sh
+EOF
+
+sudo tee /etc/systemd/system/nginx-watchdog.timer <<'EOF'
+[Unit]
+Description=Run nginx health watchdog every 30 seconds
+Requires=nginx-watchdog.service
+
+[Timer]
+OnActiveSec=30s
+OnUnitActiveSec=30s
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target
+EOF
+sudo systemctl daemon-reload && sudo systemctl enable --now nginx-watchdog.timer
+
+# logrotate
 sudo tee /etc/logrotate.d/nginx <<'EOF'
 /var/log/nginx/*.log {
 daily
 rotate 7
+size 10M
 compress
 delaycompress
 missingok
-size 10M
 postrotate
 [ ! -f /run/nginx.pid ] || kill -USR1 $(cat /run/nginx.pid)
 endscript
 }
 EOF
 
-# phase 5: fail2ban
-sudo dnf install -y fail2ban
+# fail2ban install and jail configurations
+sudo dnf install fail2ban -y
 sudo tee /etc/fail2ban/jail.local <<'EOF'
 [DEFAULT]
-bantime = 3600
-findtime = 600
-maxretry = 5
+maxretry=5
+findtime=600
+bantime=3600
 
 [sshd]
-enabled = true
+enabled=true
 
 [nginx-http-auth]
-enabled = true
+enabled=true
 EOF
-sudo systemctl enable --now fail2ban
 
-# phase 7: docker
-sudo dnf install -y docker && sudo systemctl enable --now docker
-sudo usermod -aG docker ssm-user
+# docker install & ssm-user permissions
+sudo dnf install docker -y
+sudo systemctl enable --now docker
+sudo usermod -aG docker ssm-user 
+
+
+
