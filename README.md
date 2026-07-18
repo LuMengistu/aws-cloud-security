@@ -25,15 +25,14 @@ Each Set ends with a timed capstone that combines the Set's skills into a single
 #### ● [Hardened Host](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/hardened-host) | Complete & Verified
 IMDSv2 enforcement, SSM-only access, two-layer self-healing (systemd process supervision + watchdog health check), CloudWatch audit logging. Captured as a golden AMI for all subsequent builds.
 
-#### → Edge Hardening | In Progress
-CloudFront Origin Access Control, AWS WAF integration, Prowler-verified for zero critical findings.
+#### ● [Edge Hardening](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/edge-hardening) | Complete & Verified
+CloudFront Origin Access Control with SourceArn-scoped bucket policy, AWS WAF with managed rules and per-IP rate limiting, cross-region replication for DR, and Prowler-verified zero critical findings.
 
-#### ○ VPC Defense | Upcoming
+#### → VPC Defense | In Progress
 Isolated private subnets, VPC Endpoints for internal-only service traffic, purple team lateral movement validation.
 
 #### ○ Set 1 Capstone | Pending
 A timed capstone that combines the Set's skills into a single build, done with minimal references.
-
 ## Repository Structure
 
 ```
