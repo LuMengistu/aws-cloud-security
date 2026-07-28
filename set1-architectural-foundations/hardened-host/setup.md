@@ -13,9 +13,31 @@ This rebuilds the hardened host. It splits into two parts because it cannot run 
 - IMDSv2 required, hop limit 1.
 
 **CloudWatch**
-- Log group /ssm/sessions, 7-day retention, tagged Project: Cloud-Security, Env: Dev
-- Session Manager preferences: enable CloudWatch logging, point at `/ssm/sessions`, enforce-encryption off.
-- Inline IAM policy on the role: `logs:DescribeLogGroups` on `*`; `logs:CreateLogStream`, `logs:PutLogEvents`, `logs:DescribeLogStreams` on `arn:aws:logs:*:*:log-group:/ssm/sessions:*`.
+- Log group `/ssm/sessions`, 7-day retention, tagged `Project: Cloud-Security`, `Env: Dev`.
+- Session Manager preferences: enable CloudWatch logging, point at `/ssm/sessions`, enforce-encryption off. This is an account-level setting and is separate from the log group itself — creating the group does not route sessions to it.
+- Inline IAM policy on the role. `logs:DescribeLogGroups` takes `*` because it is a list operation that cannot be resource-scoped; the stream actions are scoped to the log-group ARN with a `:*` suffix to cover the streams inside the group.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "logs:DescribeLogGroups",
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": "arn:aws:logs:*:*:log-group:/ssm/sessions:*"
+    }
+  ]
+}
+```
 
 ## Part 1 — Scriptable Block
 
