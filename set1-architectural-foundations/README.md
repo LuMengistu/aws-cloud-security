@@ -17,6 +17,10 @@ A static site behind CloudFront with S3 locked down, HTTPS enforced, WAF blockin
 
 A private network where instances serving internet traffic have no path to the internet themselves. ALB as the only ingress, VPC endpoints as the only egress, flow logs as the evidence layer, and a purple team exercise validating every control from a compromised instance.
 
-#### → Set 1 Capstone | In Progress
+#### ○ Integrated Build | Upcoming
+
+The three projects above built as one system. CloudFront and WAF at the edge, an ALB behind it, hardened instances in private subnets, and a purple team exercise run from both inside and outside.
+
+#### ○ Set 1 Capstone | Pending
 
 A timed capstone that combines the Set's skills into a single build, done with minimal references.
