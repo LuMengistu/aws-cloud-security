@@ -31,7 +31,10 @@ CloudFront Origin Access Control, AWS WAF integration, cross-region replication 
 #### ● [VPC Defense](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/vpc-defense) | Complete & Verified
 Isolated private subnets with no internet route, VPC endpoints for internal-only service traffic, endpoint policies as a data perimeter, ALB as the sole ingress, flow logs as the evidence layer, and purple team validation from a compromised instance.
 
-#### → Set 1 Capstone | In Progress
+#### ○ Integrated Build | Upcoming
+The three projects above built as one system rather than three. Edge, load balancer, and private compute in a single stack, with the purple team exercise run from both inside and outside.
+
+#### ○ Set 1 Capstone | Pending
 A timed capstone that combines the Set's skills into a single build, done with minimal references.
 
 ## Repository Structure
@@ -42,9 +45,9 @@ aws-cloud-security/
 │   ├── hardened-host/
 │   ├── edge-hardening/
 │   ├── vpc-defense/
+│   ├── integrated-build/
 │   └── set1-capstone/
 ├── set2-container-surface/
-│   ├── set1-rebuild/
 │   ├── flow-log-parser/
 │   ├── python-tooling/
 │   ├── image-hardening/
