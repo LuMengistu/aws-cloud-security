@@ -4,7 +4,7 @@
 ---
 A cloud security engineering roadmap built through hands-on AWS projects. Each project builds the infrastructure, then validates the controls through attack simulation and verification.
 
-The roadmap is organized into five Sets that build on one another. Set 1 hardens the host, edge, and network. Later Sets add Python tooling, containers, infrastructure as code, detection and response, and AI endpoint security. By Set 5, the hardened EC2 instance from Set 1 is deployed through Terraform, governed by Permission Boundaries, logged to immutable S3, and delivered through a 13-stage CI/CD pipeline. Same starting point, five passes deeper.
+The roadmap is organized into five Sets that build on one another. Set 1 hardens the host, edge, and network, then builds all three as one system. Later Sets add Python tooling, containers, infrastructure as code, detection and response, and AI endpoint security. By Set 5, the hardened EC2 instance from Set 1 is deployed through Terraform, governed by Permission Boundaries, logged to immutable S3, and delivered through a 13-stage CI/CD pipeline. Same starting point, five passes deeper.
 
 Each Set ends with a timed capstone that combines the Set's skills into a single build, done with minimal references.
 
@@ -31,10 +31,10 @@ CloudFront Origin Access Control, AWS WAF integration, cross-region replication 
 #### ● [VPC Defense](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/vpc-defense) | Complete & Verified
 Isolated private subnets with no internet route, VPC endpoints for internal-only service traffic, endpoint policies as a data perimeter, ALB as the sole ingress, flow logs as the evidence layer, and purple team validation from a compromised instance.
 
-#### ○ Integrated Build | Upcoming
-The three projects above built as one system rather than three. Edge, load balancer, and private compute in a single stack, with the purple team exercise run from both inside and outside.
+#### ● [Integrated Build](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/integrated-build) | Complete & Verified
+CloudFront as a single entry point routing by path to a locked S3 origin and an internal load balancer with no public address, reached through a VPC origin. WAF at the edge, four log streams, and a purple team exercise run from outside and inside.
 
-#### ○ Set 1 Capstone | Pending
+#### → Set 1 Capstone | In Progress
 A timed capstone that combines the Set's skills into a single build, done with minimal references.
 
 ## Repository Structure
