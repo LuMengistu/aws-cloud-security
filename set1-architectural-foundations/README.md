@@ -19,7 +19,7 @@ A private network where instances serving internet traffic have no path to the i
 
 #### ● [Integrated Build](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/integrated-build) | Complete & Verified
 
-The three projects above built as one system. A single entry point serving both static content and a private application, where the load balancer has no public address and the origin cannot be reached except through the edge. Four log streams, and a purple team exercise run from outside and inside.
+The three projects above built as one system. A single entry point serving both static content and a private application, where the load balancer has no public address and the origin cannot be reached except through the edge. Five log streams, and a purple team exercise run from outside and inside.
 
 #### → Set 1 Capstone | In Progress
 
