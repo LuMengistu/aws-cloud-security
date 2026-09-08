@@ -2,7 +2,7 @@
 
 ### Compute Hardening | Edge Security | Network Defense
 ---
-Set 1 builds the infrastructure layer the rest of the roadmap depends on. A hardened compute instance with no open ports, self-healing services, and audit logging. A static site delivered through CloudFront with the origin permanently locked, WAF blocking at the edge, and zero critical findings verified by automated scan. A private network with no internet path for internal resources, traffic controlled at every layer, and a purple team exercise to verify every control holds.
+Set 1 builds the infrastructure layer the rest of the roadmap depends on. A hardened compute instance with no open ports, self-healing services, and audit logging. A static site delivered through CloudFront with the origin permanently locked, WAF blocking at the edge, and zero critical findings verified by automated scan. A private network with no internet path for internal resources, traffic controlled at every layer, and a purple team exercise to verify every control holds. Then all three built as one system.
 
 ## Projects
 
@@ -17,10 +17,10 @@ A static site behind CloudFront with S3 locked down, HTTPS enforced, WAF blockin
 
 A private network where instances serving internet traffic have no path to the internet themselves. ALB as the only ingress, VPC endpoints as the only egress, flow logs as the evidence layer, and a purple team exercise validating every control from a compromised instance.
 
-#### ○ Integrated Build | Upcoming
+#### ● [Integrated Build](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/integrated-build) | Complete & Verified
 
-The three projects above built as one system. CloudFront and WAF at the edge, an ALB behind it, hardened instances in private subnets, and a purple team exercise run from both inside and outside.
+The three projects above built as one system. A single entry point serving both static content and a private application, where the load balancer has no public address and the origin cannot be reached except through the edge. Four log streams, and a purple team exercise run from outside and inside.
 
-#### ○ Set 1 Capstone | Pending
+#### → Set 1 Capstone | In Progress
 
 A timed capstone that combines the Set's skills into a single build, done with minimal references.
