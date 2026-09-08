@@ -87,6 +87,7 @@ Before use, substitute your own values:
 - Associate the web ACL with the distribution explicitly.
 
 **Logging**
+- WAF logs to `aws-waf-logs-p4-<ACCOUNT_ID>-us-east-1-an`, set as the web ACL's logging destination. WAF rejects any bucket name without that prefix.
 - Flow log on the VPC, filter **All**, 1-minute aggregation, to CloudWatch Logs with a new service role. That role is separate from the instance profile; it is assumed by the flow logs service, not by the instances. Format string below.
 - Load balancer access log bucket created with **Object Lock enabled** at creation, which requires versioning and cannot be added later. SSE-S3; SSE-KMS is unsupported for this delivery and fails silently. Then Properties, Object Lock, Edit, default retention Governance, 7 days. Bucket policy below. Enable access logs on the load balancer with **no prefix**.
 - CloudFront logs: use the **standard logging v2** path from the distribution's Logging tab, not the legacy option in distribution settings. Legacy requires ACLs on the destination bucket, which undoes the ACLs-disabled setting. Destination S3, format JSON, no partitioning, default fields.
