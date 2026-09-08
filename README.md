@@ -18,6 +18,16 @@ Each Set ends with a timed capstone that combines the Set's skills into a single
 | 4. Active Defense | Detection engineering, automated incident response, and AI endpoint security |
 | 5. Pipeline Integrity | DevSecOps, OIDC-federated CI/CD, and day-2 operations |
 
+## Certifications
+
+Each certification is timed to the point in the roadmap where the underlying work is already built.
+
+| Certification | Timing |
+|---|---|
+| AWS Solutions Architect Associate (SAA-C03) | Set 2, after Python Tooling |
+| HashiCorp Terraform Associate (004) | Set 3, after Terraform Migration |
+| AWS Security Specialty (SCS-C03) | Set 4, after Bedrock Endpoint |
+
 ## Current Progress
 
 ### [Set 1: Architectural Foundations](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations)
@@ -32,7 +42,7 @@ CloudFront Origin Access Control, AWS WAF integration, cross-region replication 
 Isolated private subnets with no internet route, VPC endpoints for internal-only service traffic, endpoint policies as a data perimeter, ALB as the sole ingress, flow logs as the evidence layer, and purple team validation from a compromised instance.
 
 #### ● [Integrated Build](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/integrated-build) | Complete & Verified
-CloudFront as a single entry point routing by path to a locked S3 origin and an internal load balancer with no public address, reached through a VPC origin. WAF at the edge, four log streams, and a purple team exercise run from outside and inside.
+CloudFront as a single entry point routing by path to a locked S3 origin and an internal load balancer with no public address, reached through a VPC origin. WAF at the edge, five log streams, and a purple team exercise run from outside and inside.
 
 #### → Set 1 Capstone | In Progress
 A timed capstone that combines the Set's skills into a single build, done with minimal references.
