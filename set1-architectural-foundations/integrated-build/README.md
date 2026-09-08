@@ -3,7 +3,7 @@
 ### Single Entry Point | Path-Based Routing | Private Origin
 ---
 
-A single entry point serving both static content and a private application, where the load balancer has no public address and the origin cannot be reached except through the edge. CloudFront routes by path: static assets come from a locked S3 bucket, everything else from an internal Application Load Balancer reached over a private connection into the VPC. WAF filters at the edge. Four log streams record what happened at four different layers. The stack was then attacked from outside and from inside.
+A single entry point serving both static content and a private application, where the load balancer has no public address and the origin cannot be reached except through the edge. CloudFront routes by path: static assets come from a locked S3 bucket, everything else from an internal Application Load Balancer reached over a private connection into the VPC. WAF filters at the edge. Five log streams record what happened at five different layers. The stack was then attacked from outside and from inside.
 
 **VPC** · `10.0.0.0/16`, four subnets across two AZs \
 **Region** · us-west-2, with the certificate in us-east-1 \
@@ -32,8 +32,8 @@ Two instances from the golden AMI, one per AZ, in subnets whose route table carr
 **Two rules are the whole ingress perimeter** \
 The load balancer accepts port 80 from the CloudFront service-managed security group, which exists only once a VPC origin has been created. The instances accept port 80 from the load balancer's group by reference. Nothing else reaches either. A group reference rather than a CIDR means the rule survives instance replacement, since a new instance inherits the group whatever address it receives.
 
-**Four log streams, kept apart** \
-CloudFront logs record what the edge served and what it blocked. Load balancer access logs record what reached the application, delivered to a bucket with Object Lock in governance mode so the record cannot be removed by anyone who compromises the account. VPC flow logs record connection-level decisions inside the network, in a custom format carrying the packet-level addresses that a default format omits. S3 server access logs record reads against the static origin. A request blocked at the edge appears in the first stream and is absent from the second, and that absence is the evidence it never reached compute.
+**Five log streams, kept apart** \
+CloudFront logs record what the edge served, and WAF logs record what it blocked and which rule matched. Load balancer access logs record what reached the application, delivered to a bucket with Object Lock in governance mode so the record cannot be removed by anyone who compromises the account. VPC flow logs record connection-level decisions inside the network, in a custom format carrying the packet-level addresses that a default format omits. S3 server access logs record reads against the static origin. A request blocked at the edge appears in the first stream and is absent from the second, and that absence is the evidence it never reached compute.
 
 **Attacked from both directions** \
 Nine attempts, four from outside and five from a private instance treated as already compromised. The outside half is what neither prior project could test: Edge Hardening had no compute to bypass toward, VPC Defense had no edge to bypass. The bypass question only exists once both are present.
@@ -86,7 +86,7 @@ Container egress control remains unresolved, carried forward from VPC Defense. R
 
 Inbound network ACL rules are not evaluated on the CloudFront to VPC origin path, so subnet-level rules cannot restrict edge traffic reaching the origin. Security groups are the only inbound network control there. Outbound rules still govern the return path and must permit ephemeral ports.
 
-The four log streams have no correlation between them. Answering a question that spans layers means querying each separately and matching timestamps by hand. Normalized logging arrives in Set 4.
+The five log streams have no correlation between them. Answering a question that spans layers means querying each separately and matching timestamps by hand. Normalized logging arrives in Set 4.
 
 At-rest KMS encryption on the session log group is deferred, carried forward from Hardened Host. Session Manager will not write once enforce-encryption is enabled unless a customer-managed key is attached.
 
