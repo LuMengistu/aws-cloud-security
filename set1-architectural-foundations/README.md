@@ -23,4 +23,4 @@ The three projects above built as one system. A single entry point serving both 
 
 #### → Set 1 Capstone | In Progress
 
-A timed capstone that combines the Set's skills into a single build, done with minimal references.
+A build against a prompt describing an outcome and its constraints rather than naming services, with the architecture design phase timed. Every piece it needs is something the Set already built. Minimal references, as the test is whether the build can be derived and executed without guidance.
