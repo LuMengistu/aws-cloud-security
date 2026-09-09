@@ -45,7 +45,7 @@ Isolated private subnets with no internet route, VPC endpoints for internal-only
 CloudFront as a single entry point routing by path to a locked S3 origin and an internal load balancer with no public address, reached through a VPC origin. WAF at the edge, five log streams, and a purple team exercise run from outside and inside.
 
 #### → Set 1 Capstone | In Progress
-A timed capstone that combines the Set's skills into a single build, done with minimal references.
+A build against a prompt describing an outcome and its constraints rather than naming services, with the architecture design phase timed. Every piece it needs is something the Set already built. Minimal references, as the test is whether the build can be derived and executed without guidance.
 
 ## Repository Structure
 
