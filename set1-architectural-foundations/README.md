@@ -21,6 +21,6 @@ A private network where instances serving internet traffic have no path to the i
 
 The three projects above built as one system. A single entry point serving both static content and a private application, where the load balancer has no public address and the origin cannot be reached except through the edge. Five log streams, and a purple team exercise run from outside and inside.
 
-#### → Set 1 Capstone | In Progress
-
-A build against a prompt describing an outcome and its constraints rather than naming services, with the architecture design phase timed. Every piece it needs is something the Set already built. Minimal references, as the test is whether the build can be derived and executed without guidance.
+#### ● [Set 1 Capstone](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/set1-capstone) | Complete & Verified
+ 
+A public site and a private reservation system behind one entry point, built against a prompt describing an outcome and its constraints rather than naming services. The design phase was capped at 20 minutes and the build ran from that design alone, with the Set's setup.md files available only to locate settings.
