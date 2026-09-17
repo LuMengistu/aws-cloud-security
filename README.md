@@ -44,8 +44,8 @@ Isolated private subnets with no internet route, VPC endpoints for internal-only
 #### ● [Integrated Build](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/integrated-build) | Complete & Verified
 CloudFront as a single entry point routing by path to a locked S3 origin and an internal load balancer with no public address, reached through a VPC origin. WAF at the edge, five log streams, and a purple team exercise run from outside and inside.
 
-#### → Set 1 Capstone | In Progress
-A build against a prompt describing an outcome and its constraints rather than naming services, with the architecture design phase timed. Every piece it needs is something the Set already built. Minimal references, as the test is whether the build can be derived and executed without guidance.
+#### ● [Set 1 Capstone](https://github.com/LuMengistu/aws-cloud-security/tree/main/set1-architectural-foundations/set1-capstone) | Complete & Verified
+A public site and a private reservation system behind one entry point, built against a prompt describing an outcome and its constraints rather than naming services. The design phase was capped at 20 minutes and the build ran from that design alone.
 
 ## Repository Structure
 
